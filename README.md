@@ -1,6 +1,6 @@
 # AdGuard Home Exporter
 
-[![Docker Hub](https://img.shields.io/docker/pulls/jonanek/adguardhome-exporter.svg)](https://hub.docker.com/r/jonanek/adguardhome-exporter) 
+[![GHCR](https://img.shields.io/badge/ghcr.io-image-blue?logo=github)](https://github.com/cwhde/AdGuardHome-Exporter/pkgs/container/adguardhome-exporter)
 
 Prometheus exporter for monitoring AdGuard Home instances. Supports monitoring multiple servers simultaneously.
 
@@ -105,7 +105,7 @@ docker compose up -d
 ## Run with Docker CLI
 
 ```bash
-docker run -d --restart unless-stopped --name adguard-exporter -e ADGUARD_URLS=192.168.0.8,192.168.0.9 -e ADGUARD_USERNAMES=Admin,Admin -e ADGUARD_PASSWORDS=MyBestPassword,MySecondBestPassword -p 9100:9100 jonanek/adguardhome-exporter
+docker run -d --restart unless-stopped --name adguard-exporter -e ADGUARD_URLS=192.168.0.8,192.168.0.9 -e ADGUARD_USERNAMES=Admin,Admin -e ADGUARD_PASSWORDS=MyBestPassword,MySecondBestPassword -p 9100:9100 ghcr.io/cwhde/adguardhome-exporter
 ```
 
 ## Prometheus Configuration
