@@ -27,6 +27,13 @@ jobs:
           git checkout -B automation/upstream-sync
           git merge --no-ff --no-edit upstream/master
 
+      - name: Stop when upstream is already synchronized
+        run: |
+          if git diff --quiet master...HEAD; then
+            echo "Upstream is already synchronized."
+            exit 0
+          fi
+
       - name: Push sync branch
         run: git push --force-with-lease origin HEAD:automation/upstream-sync
 
