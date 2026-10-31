@@ -1,0 +1,50 @@
+name: Sync upstream
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Merge upstream changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/JonanekDev/AdGuardHome-Exporter.git
+          git fetch upstream master
+          git checkout -B automation/upstream-sync
+          git merge --no-ff --no-edit upstream/master
+
+      - name: Stop when upstream is already synchronized
+        run: |
+          if git diff --quiet master...HEAD; then
+            echo "Upstream is already synchronized."
+            exit 0
+          fi
+
+      - name: Push sync branch
+        run: git push --force-with-lease origin HEAD:automation/upstream-sync
+
+      - name: Open or update upstream sync pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! gh pr list --head automation/upstream-sync --base master --json number --jq '.[0].number' | grep -q '[0-9]'; then
+            gh pr create \
+              --base master \
+              --head automation/upstream-sync \
+              --title "chore: sync upstream changes" \
+              --body $'Automated sync from `JonanekDev/AdGuardHome-Exporter:master`.\n\nReview this pull request before merging so fork-specific fixes remain intact.'
+          fi
