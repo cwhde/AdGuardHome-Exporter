@@ -10,7 +10,7 @@ secrets:
 
 services:
   adguard-exporter:
-    image: jonanek/adguardhome-exporter:latest
+    image: ghcr.io/cwhde/adguardhome-exporter:latest
     container_name: adguardhome-exporter
     # depends_on:
     #   - prometheus
