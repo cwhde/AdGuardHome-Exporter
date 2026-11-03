@@ -60,8 +60,8 @@ jobs:
             echo "Pull request #$existing already tracks automation/upstream-sync."
             exit 0
           fi
-          gh pr create \
-            --base master \
-            --head automation/upstream-sync \
-            --title "chore: sync upstream changes" \
-            --body $'Automated sync from `JonanekDev/AdGuardHome-Exporter:master`.\n\nReview this pull request before merging so fork-specific fixes remain intact.'
+          gh api -X POST "repos/$GITHUB_REPOSITORY/pulls" \
+            -f head=automation/upstream-sync \
+            -f base=master \
+            -f title="chore: sync upstream changes" \
+            -f body=$'Automated sync from `JonanekDev/AdGuardHome-Exporter:master`.\n\nReview this pull request before merging so fork-specific fixes remain intact.'
