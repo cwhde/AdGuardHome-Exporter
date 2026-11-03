@@ -64,8 +64,10 @@ jobs:
             echo "Pull request #$existing already tracks automation/upstream-sync."
             exit 0
           fi
-          gh pr create \
-            --base master \
-            --head automation/upstream-sync \
-            --title "chore: sync upstream changes" \
-            --body $'Automated sync from `JonanekDev/AdGuardHome-Exporter:master`.\n\nReview this pull request before merging so fork-specific fixes remain intact.'
+          echo "--- REST attempt ---"
+          curl -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
+            -d '{"head":"automation/upstream-sync","base":"master","title":"chore: sync upstream changes","body":"probe"}' | head -60
