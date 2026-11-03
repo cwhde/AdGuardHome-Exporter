@@ -31,6 +31,10 @@ jobs:
           git checkout -B automation/upstream-sync
           git merge --no-ff --no-edit upstream/master
 
+      - name: Simulate upstream change (temporary permission test)
+        run: |
+          git commit --allow-empty -m "test: simulated upstream change"
+
       - name: Detect upstream changes
         id: diff
         run: |
